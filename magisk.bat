@@ -16,7 +16,7 @@ SetLocal EnableDelayedExpansion
      for /f "delims=" %%A in ('adb shell getprop ro.build.version.sdk' ) do (
 				echo [-] Your device api Version %%A
                 set version=%%A
-                call :list_images %%A
+                goto :list_images %%A
 				)  
 
 	ENDLOCAL
@@ -38,7 +38,7 @@ setlocal EnableExtensions EnableDelayedExpansion
    if    "!str1:%version%=!" == "!str1!"  ( set ramdisk_path=%%G) else (
    
    set ramdisk_path=%%G
-   call :create-backup ramdisk_path
+   goto :create-backup ramdisk_path
    
    ) 
 )
@@ -55,13 +55,13 @@ if not exist %BACKUPFILE% (
 		copy %ramdisk_path% %BACKUPFILE% >Nul
             	echo [*] created Backup File
                             copy %ramdisk_path%  ramdisk.img 
-                            call :install
+                            goto :install
 
 
 	) else (
     	echo [-] Backup exists already
                     copy %ramdisk_path%  ramdisk.img 
-                    call :install
+                    goto :install
 
 	)
 
@@ -79,6 +79,8 @@ call %tool_Path%/patch.bat canary
 
 
 copy  ramdisk.img %ramdisk_path%
+ENDLOCAL
+exit /B 0
 
 
 :install_modules
@@ -93,19 +95,18 @@ SetLocal EnableDelayedExpansion
 				)
 			
 			)
-	call :install_ma
+	goto :install_ma
 
 	ENDLOCAL
 exit /B 0
 
-:install_ma
 
-set ADBWORKDIR=/data/data/com.android.shell
+:install_ma
+      set ADBWORKDIR=/data/data/com.android.shell
 
 	SetLocal EnableDelayedExpansion
 	echo [-] Install all Modules placed in the Apps folder
 	adb shell "su -c 'for i in $(find /data/local/tmp -name '*.zip'); do magisk --install-module "$i"; done'"
 						
-		
-	)
 	ENDLOCAL
+	exit /B 0
