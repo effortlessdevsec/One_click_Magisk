@@ -34,3 +34,6 @@ magisk.bat install
 
 ```
 
+
+### credits
+- shakalaca (https://github.com/shakalaca/MagiskOnEmulator)
