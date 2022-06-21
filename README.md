@@ -8,13 +8,16 @@ Install Magisk on Emulator and Install Modules on One click (In New Version of M
 * [Install Modules](#install_modules)
 
 
+------------------
+
+> Before running script Launch the Android studio Emulator
+
+--------------
+
 
 ## install_magisk
 
- 1. Launch Android Studio Emulator
-
-2. Run Script
-
+ > Run Script
 
 ```bash
 magisk.bat 
@@ -23,8 +26,11 @@ magisk.bat
 
 ## install_modules
 
+> there are 3 modules included in repo- Movecert,Alwaystrust,frida. You can put more and install 
+
 ```bash
 
 magisk.bat install
+
 ```
 
