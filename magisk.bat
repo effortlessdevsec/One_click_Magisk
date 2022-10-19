@@ -79,6 +79,7 @@ call %tool_Path%/patch.bat canary
 
 
 copy  ramdisk.img %ramdisk_path%
+call :ShutDownAVD
 ENDLOCAL
 exit /B 0
 
@@ -100,6 +101,22 @@ SetLocal EnableDelayedExpansion
 	ENDLOCAL
 exit /B 0
 
+:ShutDownAVD
+	SetLocal EnableDelayedExpansion
+	set ADBPULLECHO=
+	
+	REM adb shell reboot -p > tmpFile 2>&1
+	adb shell setprop sys.powerctl shutdown > tmpFile 2>&1
+	set /P ADBPULLECHO=<tmpFile
+	del tmpFile
+
+	echo.%ADBPULLECHO%| FIND /I "error">Nul || (
+  		echo [-] Trying to shut down the AVD
+	)
+	echo [^^!] If the AVD doesnt shut down, try it manually^^!
+
+	EndLocal
+exit /B 0
 
 :install_ma
       set ADBWORKDIR=/data/data/com.android.shell
